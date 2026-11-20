@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Log In</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="auth-layout">
+  <% if (locals.user) { %>
+    <section class="auth-card welcome-card">
+      <div class="brand-mark" aria-hidden="true">A</div>
+      <p class="eyebrow">YOUR ACCOUNT</p>
+      <h1>Welcome back, <%= user.username %></h1>
+      <p class="subtitle">You’re signed in and ready to go.</p>
+      <form action="/log-out" method="POST">
+        <button class="button button-secondary" type="submit">Log out</button>
+      </form>
+    </section>
+  <% } else { %>
+    <section class="auth-card">
+      <div class="brand-mark" aria-hidden="true">A</div>
+      <p class="eyebrow">WELCOME BACK</p>
+      <h1>Log in to your account</h1>
+      <p class="subtitle">Enter your details below to continue.</p>
+      <form class="auth-form" action="/log-in" method="POST">
+        <label for="username">Username</label>
+        <input id="username" name="username" placeholder="Your username" type="text" autocomplete="username" required>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="Your password" autocomplete="current-password" required>
+        <button class="button" type="submit">Log in</button>
+      </form>
+      <p class="form-footer">New here? <a href="/sign-up">Create an account</a></p>
+    </section>
+  <% } %>
+  </main>
+</body>
+</html>

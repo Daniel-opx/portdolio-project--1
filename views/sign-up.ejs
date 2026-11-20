@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="auth-layout">
+    <section class="auth-card">
+      <div class="brand-mark" aria-hidden="true">A</div>
+      <p class="eyebrow">GET STARTED</p>
+      <h1>Create your account</h1>
+      <p class="subtitle">A few details and you’ll be ready to go.</p>
+      <form class="auth-form" action="/sign-up" method="POST">
+        <label for="username">Username</label>
+        <input id="username" name="username" placeholder="Choose a username" type="text" autocomplete="username" required>
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="Create a password" autocomplete="new-password" required>
+        <button class="button" type="submit">Create account</button>
+      </form>
+      <p class="form-footer">Already have an account? <a href="/">Log in</a></p>
+    </section>
+  </main>
+</body>
+</html>

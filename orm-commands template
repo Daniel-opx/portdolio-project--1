@@ -1,0 +1,24 @@
+import { Prisma, PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+// ✅ SAFE: Standard ORM API (automatically parameterized)
+const user = await prisma.user.findMany({
+  where: { email: userInputEmail },
+});
+
+// ✅ SAFE: Raw SQL with tagged template literals
+const rawUsers = await prisma.$queryRaw`
+  SELECT id, email FROM "User" WHERE email = ${userInputEmail}
+`;
+
+// ✅ SAFE: Dynamic raw SQL using Prisma.sql & Prisma.empty
+const roleFilter = role ? Prisma.sql`AND role = ${role}` : Prisma.empty;
+const filteredUsers = await prisma.$queryRaw`
+  SELECT id, email FROM "User" WHERE active = true ${roleFilter}
+`;
+
+// ❌ DANGEROUS: Never use string interpolation with $queryRawUnsafe
+const unsafeUsers = await prisma.$queryRawUnsafe(
+  `SELECT * FROM "User" WHERE email = '${userInputEmail}'`
+);
