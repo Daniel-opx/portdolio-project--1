@@ -5,11 +5,11 @@ const pool = require("./db/pool.js"); // postgress pool connector
 const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
-const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require("bcryptjs");
 const passportStrategy = require("./auth/passportStrategy.js")
 const session_controllers = require("./auth/session_funcs.js")
 
+const userRouter =require("./routers/userRouter.js")
 
 
 const app = express();
@@ -18,21 +18,24 @@ app.set("view engine", "ejs");
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(session({ secret: "cats", resave: false, saveUninitialized: false }));
+app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
-
+/*auth and session middleware*/
 //=========================================
-passport.use('passpword',passportStrategy)
-
-
-
+passport.use("local", passportStrategy.localStrategy);
 passport.serializeUser(session_controllers.serializaeUser);
-
 passport.deserializeUser(session_controllers.deserializeUser);
 
-
 //========================================
+
+
+/*router middleware */
+//=================================
+
+app.use("/",userRouter)
+//===============================
 
 app.get("/", (req, res) => {
   res.render("index", { user: req.user });
@@ -65,31 +68,18 @@ app.post("/sign-up", async (req, res, next) => {
    }
 });
 
-app.post(
-  "/log-in",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/",
-    failureMessage: "true",
-  })
-);
 
 
-app.all("/", (req,res) => {
-    if (req.session.messages){
-        console.log(req.session.messages)
-    }
-})
 
-function errorHandler(err, req, res, next) {
+
+
+app.use((err, req, res, next) => {
   if (res.headersSent) {
     return next(err);
   }
   res.status(500);
   res.render('error', { error: err });
-}
-
-app.use(errorHandler)
+})
 
 
 
